@@ -100,6 +100,7 @@ public class ChargingControlSettings extends SettingsPreferenceFragment implemen
     @Override
     public void onResume() {
         super.onResume();
+        refreshValues();
         refreshUi();
     }
 
@@ -197,7 +198,8 @@ public class ChargingControlSettings extends SettingsPreferenceFragment implemen
     @Override
     public boolean onPreferenceChange(final Preference preference, final Object objValue) {
         if (preference == mChargingControlEnabledPref) {
-            mHealthInterface.setEnabled((Boolean) objValue);
+            // Keep the switch unchanged if releasing the other controller failed.
+            return mHealthInterface.setEnabled((Boolean) objValue);
         } else if (preference == mChargingControlModePref) {
             final int chargingControlMode = Integer.parseInt((String) objValue);
             mHealthInterface.setMode(chargingControlMode);
